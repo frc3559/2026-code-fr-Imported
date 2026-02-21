@@ -33,7 +33,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.IntakeFloorSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
-//import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.HookSubsystem;
 
 /*
@@ -50,7 +50,7 @@ public class RobotContainer {
   private final IntakeFloorSubsystem m_robotIntakeFloor = new IntakeFloorSubsystem();
   private final IntakePivotSubsystem m_robotIntakePivot = new IntakePivotSubsystem();
   private final HookSubsystem m_robotHook = new HookSubsystem();
-  //private final HookSubsystem m_robotFeeder = new HookSubsystem();
+  private final FeederSubsystem m_robotFeeder = new FeederSubsystem();
 
 
   // The driver's controller
@@ -101,7 +101,7 @@ public class RobotContainer {
     */
 
     m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(1), () -> m_robotShoot.shooterSet(0)));
-    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotFeeder.feederSet(1), () -> m_robotFeeder.feederSet(0))); we need to add delay
+    m_driverController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotFeeder.feederSet(0))); // we need to add delay
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeFloor.intakeFloor(1), () -> m_robotIntakeFloor.intakeFloor(0)));
     //pivots need to be absolute encoderssS
     m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.25), () -> m_robotIntakePivot.intakePivotUp(0)));
@@ -110,9 +110,13 @@ public class RobotContainer {
     m_operatorController.y().whileTrue(runEnd(() -> m_robotElevate.elevate(-0.25), () -> m_robotElevate.elevate(0)));
     m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookOn(0.25), () -> m_robotHook.hookOff(0)));
     m_operatorController.x().whileTrue(runEnd(() -> m_robotHook.hookOff(-0.25), () -> m_robotHook.hookOff(0)));
-    //
   }
 
+  private void shootBall() { //This will run when the shooter motors get up to speed
+    if (m_robotShoot.isReady()) {
+        m_robotFeeder.feederSet(1);
+    }
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

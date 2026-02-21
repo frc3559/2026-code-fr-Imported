@@ -1,4 +1,4 @@
-/* package frc.robot.subsystems;
+package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -13,9 +13,9 @@ public class FeederSubsystem  extends SubsystemBase{
     }
 
     public void feederSet(double speed){
-     
+    
     feederMotor.set(speed);
     }
 
-} */
+}
  //new feeder code, we need to add delay
