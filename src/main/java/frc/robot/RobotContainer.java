@@ -33,7 +33,8 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.IntakeFloorSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
-
+//import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.HookSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -48,6 +49,9 @@ public class RobotContainer {
   private final ElevatorSubsystem m_robotElevate = new ElevatorSubsystem();
   private final IntakeFloorSubsystem m_robotIntakeFloor = new IntakeFloorSubsystem();
   private final IntakePivotSubsystem m_robotIntakePivot = new IntakePivotSubsystem();
+  private final HookSubsystem m_robotHook = new HookSubsystem();
+  //private final HookSubsystem m_robotFeeder = new HookSubsystem();
+
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -97,12 +101,16 @@ public class RobotContainer {
     */
 
     m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(1), () -> m_robotShoot.shooterSet(0)));
+    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotFeeder.feederSet(1), () -> m_robotFeeder.feederSet(0))); we need to add delay
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeFloor.intakeFloor(1), () -> m_robotIntakeFloor.intakeFloor(0)));
     //pivots need to be absolute encoderssS
     m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.25), () -> m_robotIntakePivot.intakePivotUp(0)));
     m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(-0.25), () -> m_robotIntakePivot.intakePivotDown(0)));
     m_operatorController.a().whileTrue(runEnd(() -> m_robotElevate.elevate(0.25), () -> m_robotElevate.elevate(0)));
     m_operatorController.y().whileTrue(runEnd(() -> m_robotElevate.elevate(-0.25), () -> m_robotElevate.elevate(0)));
+    m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookOn(0.25), () -> m_robotHook.hookOff(0)));
+    m_operatorController.x().whileTrue(runEnd(() -> m_robotHook.hookOff(-0.25), () -> m_robotHook.hookOff(0)));
+    //
   }
 
   /**
