@@ -8,18 +8,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    private final SparkMax innerElevatorMotor = new SparkMax(21, MotorType.kBrushless);
-    RelativeEncoder innerElevatorEncoder;
+    private final SparkMax climberElevatorMotor = new SparkMax(26, MotorType.kBrushless);
+    RelativeEncoder climberElevatorEncoder;
 
     public void encodersubSystems() {
-        innerElevatorEncoder = innerElevatorMotor.getEncoder();
+        climberElevatorEncoder = climberElevatorMotor.getEncoder();
         // SmartDashboard.putNumber("outer Elevator Encoder",
         // outerElevatorEncoder.getPosition());
         // SmartDashboard.putNumber("inner Elevator Encoder",
         // innerElevatorEncoder.getPosition());
     }
     public void elevate(double speed){
-        innerElevatorMotor.set(speed);
+        climberElevatorMotor.set(speed);
     }
     public ElevatorSubsystem() {
 
@@ -27,7 +27,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        innerElevatorEncoder = innerElevatorMotor.getEncoder();
-        SmartDashboard.putNumber("inner Elevator Encoder", innerElevatorMotor.getEncoder().getPosition());
+        climberElevatorEncoder = climberElevatorMotor.getEncoder();
+        SmartDashboard.putNumber("inner Elevator Encoder", climberElevatorMotor.getEncoder().getPosition());
     }
 }
