@@ -17,5 +17,9 @@ public class FeederSubsystem  extends SubsystemBase{
     feederMotor.set(speed);
     }
 
+    public boolean isRunning() { //If motor is set to a speed greater than .1, this returns true
+        return (feederMotor.get() > 0.1);
+    }
+
 }
  //new feeder code, we need to add delay

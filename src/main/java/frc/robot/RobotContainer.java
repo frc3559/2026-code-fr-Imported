@@ -102,7 +102,7 @@ public class RobotContainer {
 
     m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(1), () -> m_robotShoot.shooterSet(0)));
     m_driverController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotFeeder.feederSet(0))); // we need to add delay
-    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1), () -> m_robotIntakeSnake.intakeSnake(0)));
+    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, false)));
     m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.25), () -> m_robotIntakePivot.intakePivotUp(0)));
     m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(-0.25), () -> m_robotIntakePivot.intakePivotDown(0)));
     m_operatorController.a().whileTrue(runEnd(() -> m_robotElevate.elevate(0.25), () -> m_robotElevate.elevate(0)));
