@@ -31,9 +31,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.IntakeFloorSubsystem;
-import frc.robot.subsystems.IntakePivotSubsystem;
-
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -46,11 +43,9 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_robotShoot = new ShooterSubsystem();
   private final ElevatorSubsystem m_robotElevate = new ElevatorSubsystem();
-  private final IntakeFloorSubsystem m_robotIntakeFloor = new IntakeFloorSubsystem();
-  private final IntakePivotSubsystem m_robotIntakePivot = new IntakePivotSubsystem();
 
   // The driver's controller
-  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kDriverControllerPort);
 
   /**
@@ -82,9 +77,7 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
- 
   private void configureButtonBindings() {
-    /*
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
@@ -94,15 +87,10 @@ public class RobotContainer {
         .onTrue(new InstantCommand(
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
-    */
 
-    m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(1), () -> m_robotShoot.shooterSet(0)));
-    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeFloor.intakeFloor(1), () -> m_robotIntakeFloor.intakeFloor(0)));
-    //pivots need to be absolute encoderssS
-    m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.25), () -> m_robotIntakePivot.intakePivotUp(0)));
-    m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(-0.25), () -> m_robotIntakePivot.intakePivotDown(0)));
-    m_operatorController.a().whileTrue(runEnd(() -> m_robotElevate.elevate(0.25), () -> m_robotElevate.elevate(0)));
-    m_operatorController.y().whileTrue(runEnd(() -> m_robotElevate.elevate(-0.25), () -> m_robotElevate.elevate(0)));
+    m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(1), () -> m_robotShoot.shooterSet(0)));
+    m_operatorController.povDown().whileTrue(runEnd(() -> m_robotElevate.elevate(0.25), () -> m_robotElevate.elevate(0)));
+    m_operatorController.povUp().whileTrue(runEnd(() -> m_robotElevate.elevate(-0.25), () -> m_robotElevate.elevate(0)));
   }
 
   /**
