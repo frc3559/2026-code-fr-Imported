@@ -100,7 +100,8 @@ public class RobotContainer {
             m_robotDrive));
     */
 
-    m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.65), () -> m_robotShoot.shooterSet(0)));
+   // m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.7), () -> m_robotShoot.shooterSet(0))); old shooting code
+    m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_driverController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotFeeder.feederSet(0)));
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(.6, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, false)));
     m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(0.25), () -> m_robotIntakePivot.intakePivotUp(0)));
