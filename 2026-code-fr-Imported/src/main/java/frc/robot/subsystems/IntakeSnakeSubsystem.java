@@ -20,9 +20,12 @@ public class IntakeSnakeSubsystem extends SubsystemBase {
     }
 
     public void intakeSnake(double speed, boolean feederRunning) { //IR Sensor gets if not blocked/ if detecting
-        /*if(IRSensor.get()) {
+        if(IRSensor.get()) {
             System.out.println("Sensor gets");
-        } test code */
+        } else {
+            System.out.println("Sensor does not get");
+        }
+
 
      if (IRSensor.get() == true || speed == 0 || feederRunning) { //we might have to set IRSensor.get to need to be false based on how the ir sensor works, needs testing
          //   intakeFloor.set(speed);

@@ -21,6 +21,9 @@ public class ShooterSubsystem  extends SubsystemBase {
     public void shooterSet(double speed) {
         shooterMotor1.set(speed);
        // shooterMotor2.set(speed);
+       System.out.println("Shooter Motors set to " + speed);
+       System.out.println("Shooter Motor 1 running at" + shooterEncoder1.getVelocity());
+     //System.out.println("Shooter Motor 2 running at" + shooterEncoder2.getVelocity());
     }
 
     // This function returns true once motors are spun up and ready to fire

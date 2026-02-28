@@ -110,7 +110,7 @@ public class RobotContainer {
     m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookOn(0.25), () -> m_robotHook.hookOff(0)));
     m_operatorController.x().whileTrue(runEnd(() -> m_robotHook.hookOff(-0.25), () -> m_robotHook.hookOff(0)));
   }
- //
+ 
   private void shootBall() { //This will run when the shooter motors get up to speed
     if (m_robotShoot.isReady()) {
         m_robotFeeder.feederSet(.25);
