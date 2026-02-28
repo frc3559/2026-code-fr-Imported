@@ -21,9 +21,9 @@ public class IntakeSnakeSubsystem extends SubsystemBase {
 
     public void intakeSnake(double speed, boolean feederRunning) { //IR Sensor gets if not blocked/ if detecting
         if(IRSensor.get()) {
-            System.out.println("IRSensor true");
+            System.out.println("IRSensor does not detect ball");
         } else {
-            System.out.println("IRSensor false");
+            System.out.println("IRSensor detects ball");
         }
 
 
