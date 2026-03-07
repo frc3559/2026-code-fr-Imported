@@ -30,3 +30,4 @@ public class ElevatorSubsystem extends SubsystemBase {
         // System.out.println("Position: " + elevator.getEncoder().getPosition()); //Code to determine the position of the encoder
     }
 }
+// Remove encoder code

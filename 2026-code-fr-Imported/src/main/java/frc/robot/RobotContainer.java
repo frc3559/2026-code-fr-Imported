@@ -49,7 +49,7 @@ public class RobotContainer {
   private final ElevatorSubsystem m_robotElevate = new ElevatorSubsystem();
   private final IntakeSnakeSubsystem m_robotIntakeSnake = new IntakeSnakeSubsystem();
   private final IntakePivotSubsystem m_robotIntakePivot = new IntakePivotSubsystem();
-  private final HookSubsystem m_robotHook = new HookSubsystem();
+  //private final HookSubsystem m_robotHook = new HookSubsystem();
   private final FeederSubsystem m_robotFeeder = new FeederSubsystem();
 
 
@@ -104,12 +104,12 @@ public class RobotContainer {
     m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_driverController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotFeeder.feederSet(0)));
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(.6, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, false)));
-    m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(0.25), () -> m_robotIntakePivot.intakePivotUp(0)));
-    m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(-0.25), () -> m_robotIntakePivot.intakePivotDown(0)));
+    m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(0.15), () -> m_robotIntakePivot.intakePivotUp(0)));
+    m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(-0.15), () -> m_robotIntakePivot.intakePivotDown(0)));
     m_operatorController.a().whileTrue(runEnd(() -> m_robotElevate.elevate(0.25), () -> m_robotElevate.elevate(0)));
     m_operatorController.y().whileTrue(runEnd(() -> m_robotElevate.elevate(-0.25), () -> m_robotElevate.elevate(0)));
-    m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookOn(0.25), () -> m_robotHook.hookOff(0)));
-    m_operatorController.x().whileTrue(runEnd(() -> m_robotHook.hookOff(-0.25), () -> m_robotHook.hookOff(0)));
+   // m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookOn(0.25), () -> m_robotHook.hookOff(0)));
+   // m_operatorController.x().whileTrue(runEnd(() -> m_robotHook.hookOff(-0.25), () -> m_robotHook.hookOff(0)));
   }
  
   private void shootBall() { //This will run when the shooter motors get up to speed

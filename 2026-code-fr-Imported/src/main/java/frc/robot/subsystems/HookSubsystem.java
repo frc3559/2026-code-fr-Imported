@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class HookSubsystem extends SubsystemBase {
     public SparkMax hook;
-    public static final int  kHookMotorCanId = 10;
+    public static final int  kHookMotorCanId = 256;
 
     public HookSubsystem() {
         hook = new SparkMax(kHookMotorCanId, MotorType.kBrushless);
@@ -21,7 +21,7 @@ public class HookSubsystem extends SubsystemBase {
         SparkMaxConfig hookConfig = new SparkMaxConfig();
         hookConfig.apply(hookLimitConfig); //applies the hooklimitconfig's limits to the spark max config called hookconfig
         hook.configure(hookConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters); //Change persist and reset paramaters to no or blank based on what we want
-    } //the above line configures the motor hook based on hookConfig
+    } //the above line configures the motor hook based on hookConfig 
 
     public void hookOn(double speed) {
         hook.set(speed);
@@ -30,3 +30,4 @@ public class HookSubsystem extends SubsystemBase {
         hook.set(speed);
     }
 } //new intake floor code
+// Replace all this with the intake pivot-styled encoder code

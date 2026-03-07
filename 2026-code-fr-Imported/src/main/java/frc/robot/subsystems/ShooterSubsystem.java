@@ -11,7 +11,7 @@ public class ShooterSubsystem  extends SubsystemBase {
    // private final SparkFlex shooterMotor2 = new SparkFlex(23, MotorType.kBrushless);
     private RelativeEncoder shooterEncoder1;
    // private RelativeEncoder shooterEncoder2;
-    private final int minSpeed = 1600; //Minimum speed for shooters to run for isReady to return true, tolerance is within .05 of nominal shooter speed
+    private final int minSpeed = 1500; //Minimum speed for shooters to run for isReady to return true, tolerance is within .05 of nominal shooter speed
     //Encoder.getVelocity gives you rpm, so minSpeed should be several times higher than the motor speed
     private boolean isRunning = false;
     private int frameIncrementer = 0;
