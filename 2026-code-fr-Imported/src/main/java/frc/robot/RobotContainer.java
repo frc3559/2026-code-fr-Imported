@@ -29,12 +29,14 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 //import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.IntakeSnakeSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
-//import frc.robot.subsystems.HookSubsystem;
+import frc.robot.subsystems.HookSubsystem;
+import frc.robot.subsystems.HookSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -44,26 +46,29 @@ import frc.robot.subsystems.FeederSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final ShooterSubsystem m_robotShoot = new ShooterSubsystem();
-  //private final ElevatorSubsystem m_robotElevate = new ElevatorSubsystem();
-  private final IntakeSnakeSubsystem m_robotIntakeSnake = new IntakeSnakeSubsystem();
+  private DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private ShooterSubsystem m_robotShoot = new ShooterSubsystem();
+  //private final ElevatorSubsystem m_robotElevate //= new ElevatorSubsystem();
+  private IntakeSnakeSubsystem m_robotIntakeSnake = new IntakeSnakeSubsystem();
   private IntakePivotSubsystem m_robotIntakePivot; //= new IntakePivotSubsystem();
-  //private final HookSubsystem m_robotHook = new HookSubsystem();
-  private final FeederSubsystem m_robotFeeder = new FeederSubsystem();
+  private HookSubsystem m_robotHook; //= new HookSubsystem();
+  private FeederSubsystem m_robotFeeder = new FeederSubsystem();
 
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
+
+  public RobotContainer() {
+    configureButtonBindings();
+  }
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer(IntakePivotSubsystem bob) {
+  public void SetIntakePivot(IntakePivotSubsystem intPvt) {
     // Configure the button bindings
-    m_robotIntakePivot = bob;
-    configureButtonBindings();
+    m_robotIntakePivot = intPvt;
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -78,7 +83,15 @@ public class RobotContainer {
             m_robotDrive));
   }
 
-  /**
+  public void SetHook(HookSubsystem hk) {
+    m_robotHook = hk;
+}
+
+/*public  void SetElevator(ElevatorSubsystem m_elvtr) {
+   m_robotElevate = hk;
+}*/
+
+/**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
@@ -107,10 +120,10 @@ public class RobotContainer {
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(.6, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, false)));
     m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(0.1), () -> m_robotIntakePivot.intakePivotUp(0)));
     m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(-0.1), () -> m_robotIntakePivot.intakePivotDown(0)));
-    //m_operatorController.a().whileTrue(runEnd(() -> m_robotElevate.elevate(0.25), () -> m_robotElevate.elevate(0)));
-    //m_operatorController.y().whileTrue(runEnd(() -> m_robotElevate.elevate(-0.25), () -> m_robotElevate.elevate(0)));
-    // m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookOn(0.25), () -> m_robotHook.hookOff(0)));
-    // m_operatorController.x().whileTrue(runEnd(() -> m_robotHook.hookOff(-0.25), () -> m_robotHook.hookOff(0)));
+    //m_operatorController.a().whileTrue(runEnd(() -> m_robotElevate.elevatorUp(0.25), () -> m_robotElevate.elevatorUp(0)));
+    //m_operatorController.y().whileTrue(runEnd(() -> m_robotElevate.elevatorDown(-0.25), () -> m_robotElevate.elevatorDown(0)));
+    m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookUp(0.1), () -> m_robotHook.hookUp(0)));
+    m_operatorController.x().whileTrue(runEnd(() -> m_robotHook.hookDown(-0.1), () -> m_robotHook.hookDown(0)));
   }
  
   private void shootBall() { //This will run when the shooter motors get up to speed

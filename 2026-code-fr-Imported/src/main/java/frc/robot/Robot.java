@@ -7,7 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 
 /**
@@ -19,6 +21,10 @@ import frc.robot.subsystems.IntakePivotSubsystem;
 
 public class Robot extends TimedRobot {
   private IntakePivotSubsystem m_robotIntakePivot;
+
+  private HookSubsystem m_Hook;
+
+  private ElevatorSubsystem m_elevator;
   
   private Command m_autonomousCommand;
 
@@ -32,15 +38,34 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    m_robotContainer = new RobotContainer();
+
     try{
-    m_robotIntakePivot = new IntakePivotSubsystem(); //Initializes the intake pivot subsystem so that we can read the encoder value in the next line
+      m_robotIntakePivot = new IntakePivotSubsystem(); //Initializes the intake pivot subsystem so that we can read the encoder value in the next line
+      m_robotIntakePivot.readIntakePivotEncoder(); //Calls the readIntakePivotEncoder method in Intake Pivot
+      m_robotContainer.SetIntakePivot(m_robotIntakePivot);
     } catch (Exception e) {
       System.out.println("Intake Pivot Subsystem failed to initialize. Check wiring and CAN ID, function robotInit.");
       e.printStackTrace();
     }
-    
-    m_robotIntakePivot.readIntakePivotEncoder(); //Calls the readIntakePivotEncoder method in Intake Pivot
-    m_robotContainer = new RobotContainer(m_robotIntakePivot);
+
+    try{
+      m_Hook = new HookSubsystem(); //Initializes the intake pivot subsystem so that we can read the encoder value in the next line
+      m_Hook.readHookEncoder(); //Calls the readHookEncoder method in Hook
+      m_robotContainer.SetHook(m_Hook);
+    } catch (Exception e) {
+      System.out.println("Intake Pivot Subsystem failed to initialize. Check wiring and CAN ID, function robotInit.");
+      e.printStackTrace();
+    }
+
+    /*try{
+      m_elevator = new ElevatorSubsystem(); //Initializes the elevator subsystem so that we can read the encoder value in the next line
+      m_elevator.readElevatorEncoder(); //Calls the readElevatorEncoder method in Elevator
+      m_robotContainer.SetElevator(m_elevator);
+    } catch (Exception e) {
+      System.out.println("Elevator Subsystem failed to initialize. Check wiring and CAN ID, function robotInit.");
+      e.printStackTrace();
+    }*/
   }
 
   /**
