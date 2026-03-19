@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+//import com.kauailabs.navx.frc.AHRS;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -46,6 +47,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  //AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(

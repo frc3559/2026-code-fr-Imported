@@ -107,8 +107,8 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+    
+    new JoystickButton(m_driverController, CommandXboxController.Button.kStart.value)
         .onTrue(new InstantCommand(
             () -> m_robotDrive.zeroHeading(),
             m_robotDrive));
