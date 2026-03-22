@@ -76,8 +76,8 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY()/*  + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX()/*  + )*/, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
@@ -114,12 +114,14 @@ public class RobotContainer {
             m_robotDrive));
     */
 
-   // m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.7), () -> m_robotShoot.shooterSet(0))); old shooting code
-    m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
-    m_driverController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotFeeder.feederSet(0)));
-    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(.6, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, false)));
-    m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(0.1), () -> m_robotIntakePivot.intakePivotUp(0)));
-    m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(-0.1), () -> m_robotIntakePivot.intakePivotDown(0)));
+
+
+    m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.3), () -> m_robotShoot.stopShooter())); //old shooting code
+   //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
+    m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotFeeder.feederSet(0)));
+    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, .2, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
+    m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.1), () -> m_robotIntakePivot.intakePivotUp(0)));
+    m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(0.075), () -> m_robotIntakePivot.intakePivotDown(0)));
     //m_operatorController.a().whileTrue(runEnd(() -> m_robotElevate.elevatorUp(0.25), () -> m_robotElevate.elevatorUp(0)));
     //m_operatorController.y().whileTrue(runEnd(() -> m_robotElevate.elevatorDown(-0.25), () -> m_robotElevate.elevatorDown(0)));
     //m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookUp(0.1), () -> m_robotHook.hookUp(-0.1)));
@@ -135,7 +137,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  /*public Command getAutonomousCommand() {     -------------------------------------------------------------Auto code
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -173,6 +175,6 @@ public class RobotContainer {
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
-  }
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, true));
+  }*/
 }

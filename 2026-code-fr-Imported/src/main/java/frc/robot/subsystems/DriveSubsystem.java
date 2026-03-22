@@ -50,6 +50,7 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private AHRS ahrs = new AHRS(AHRS.NavXComType.kMXP_SPI);
+  
 
   double degrees = ahrs.getYaw();
 

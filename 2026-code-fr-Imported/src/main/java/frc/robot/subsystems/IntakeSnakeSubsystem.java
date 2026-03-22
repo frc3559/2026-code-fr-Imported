@@ -21,7 +21,7 @@ public class IntakeSnakeSubsystem extends SubsystemBase {
         IRSensor = new DigitalInput(0); //This is the pin that the ir sensor is plugged into
     }
 
-    public void intakeSnake(double speed, boolean feederRunning) { //IR Sensor gets if not blocked/ if detecting
+    public void intakeSnake(double speed1, double speed2, boolean feederRunning) { //IR Sensor gets if not blocked/ if detecting
         if(IRSensor.get()) {
             System.out.println("IRSensor does not detect ball");
         } else {
@@ -29,12 +29,16 @@ public class IntakeSnakeSubsystem extends SubsystemBase {
         }
 
 
-     if (IRSensor.get() == true || speed == 0 || feederRunning) { //we might have to set IRSensor.get to need to be false based on how the ir sensor works, needs testing
-            intakeFloor.set(speed);
-            intakeSnake.set(speed);
+     if (IRSensor.get() == true || speed1 == 0 || feederRunning) { //we might have to set IRSensor.get to need to be false based on how the ir sensor works, needs testing
+            intakeSnake.set(speed1);
+        } else {
+            intakeSnake.set(0);
+        }
+
+        if (IRSensor.get() == true || speed2 == 0 || feederRunning) { //we might have to set IRSensor.get to need to be false based on how the ir sensor works, needs testing
+            intakeFloor.set(speed2);
         } else {
             intakeFloor.set(0);
-            intakeSnake.set(0);
         }
     }
 }

@@ -28,21 +28,21 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
 
     public void intakePivotUp(double speed) {
-        if(intakePivot.getEncoder().getPosition() < intakeZero) {
+        if(intakePivot.getEncoder().getPosition() > intakeZero) {
         intakePivot.set(speed);
         System.out.println("Position: " + intakePivot.getEncoder().getPosition()); //Code to determine the position of the encoder
-        } else {
+         } else {
             intakePivot.set(0);
-        }
+        } 
     }
-   
+    
     
     public void intakePivotDown(double speed) {
-        if(intakePivot.getEncoder().getPosition() > (intakeZero - 7.5)) {
+        if(intakePivot.getEncoder().getPosition() < (intakeZero + 1.25)) {
         intakePivot.set(speed);
         System.out.println("Position: " + intakePivot.getEncoder().getPosition()); //Code to determine the position of the encoder
-        } else {
+         } else {
             intakePivot.set(0);
-        }
+        } 
     }
 }

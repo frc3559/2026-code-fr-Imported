@@ -1,0 +1,25 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid - Top 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid - Top 2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Mid",
+  "choreoAuto": false
+}
