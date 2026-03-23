@@ -56,7 +56,7 @@ public class ShooterSubsystem  extends SubsystemBase {
         return true;
     }*/
     
-    
+
     public void stopShooter() {
         shooterMotor1.set(0);
         shooterMotor2.set(0);

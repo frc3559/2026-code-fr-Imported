@@ -67,18 +67,19 @@ public class RobotContainer {
 
   public RobotContainer() {
     //Pathplanner
-   /* NamedCommands.registerCommand(
-      "Btm - Top",
+    /*
+    NamedCommands.registerCommand(
+      "PathPlannerTest",
       Commands.sequence(
       m_robotShoot.shooterSet(.8),
-      Commands.waitSeconds(8),
-      m_robotShoot.stopShooter(.8)
-      ));*/
+      Commands.waitSeconds(8)
+      )
+    );
 
-      /*
-      autoChooser = AutoBuilder.buildAutoChooser();    //Needed for Pathplanner
-      SmartDashboard.putData("AutoChooser", autoChooser);
-      */
+      
+    autoChooser = AutoBuilder.buildAutoChooser();    //Needed for Pathplanner
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    */
 
     configureButtonBindings();
   }
