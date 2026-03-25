@@ -23,6 +23,7 @@ import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SPI;
 import com.studica.frc.AHRS;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class DriveSubsystem extends SubsystemBase {
@@ -73,6 +74,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    SmartDashboard.putNumber("gyro angle", ahrs.getYaw());
+
     // Update the odometry in the periodic block
     m_odometry.update(
         Rotation2d.fromDegrees(ahrs.getAngle()),
