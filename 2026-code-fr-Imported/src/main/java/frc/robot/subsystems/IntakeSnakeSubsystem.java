@@ -45,10 +45,10 @@ public class IntakeSnakeSubsystem extends SubsystemBase {
         }
     }
 
-public boolean IRDetectsBall() { //I have two proposals for different ways to detects if the IR sensor detected a ball every 50 frames. This is proposal 1.
+public boolean IRDetectsBall() { 
     if (frameIncrementer >= 50) { //Checks once(out of two required checks) every 50 frames
         frameIncrementer = 0; //Resets the timing
-        if (DetectionDebounce()) {
+        if (IRSensor.get()) {
             lastConditional = true;
             System.out.println("IR Sensor detects ball");
             return true;
@@ -63,45 +63,6 @@ public boolean IRDetectsBall() { //I have two proposals for different ways to de
     }
 }
 
-public boolean DetectionDebounce() { //If the IR sensor detects a ball twice in a row, returns true
-    if (IRSensor.get()) { 
-        if (lastIRDetects) {
-            lastIRDetects = true;
-            return true;
-        } else {
-            lastIRDetects = true;
-            return false;
-        }
-    } else {
-        lastIRDetects = false;
-        return false;
-    }
-} 
 
-/*public boolean IRDetectsBall() { //This is proposal 2
-    if (frameIncrementer >= 50) { //Checks once(out of two required checks) every 50 frames
-        frameIncrementer = 0; //Resets the timing
-        if (IRSensor.get()) {
-            if (lastIRDetects) {
-                System.out.println("IR sensor detects ball");
-                lastConditional = true;
-                lastIRDetects = true;
-                return true;
-            } else {
-                System.out.println("IR sensor does not detect ball");
-                lastConditional = false;
-                lastIRDetects = true;
-                return false;
-            }
-        } else {
-            lastIRDetects = false;
-            lastConditional = false;
-            return false;
-        }
-    } else {
-        frameIncrementer++;
-        return lastConditional;
-    }
-} */
 }
 //☻

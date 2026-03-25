@@ -53,12 +53,12 @@ public class DriveSubsystem extends SubsystemBase {
   private AHRS ahrs = new AHRS(AHRS.NavXComType.kMXP_SPI);
   
 
-  double degrees = ahrs.getYaw();
+  double degrees = -ahrs.getYaw();
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(ahrs.getAngle()),
+      Rotation2d.fromDegrees(-ahrs.getAngle()),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -75,11 +75,11 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    SmartDashboard.putNumber("gyro angle", ahrs.getYaw());
+    SmartDashboard.putNumber("gyro angle", -ahrs.getYaw()); //Prints the gyro yaw in smart dashboard
 
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(ahrs.getAngle()),
+        Rotation2d.fromDegrees(-ahrs.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -104,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(ahrs.getAngle()),
+        Rotation2d.fromDegrees(-ahrs.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -132,7 +132,7 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                Rotation2d.fromDegrees(ahrs.getAngle()))
+                Rotation2d.fromDegrees(-ahrs.getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -185,7 +185,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(ahrs.getAngle()).getDegrees();
+    return Rotation2d.fromDegrees(-ahrs.getAngle()).getDegrees();
   }
 
   /**
