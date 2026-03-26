@@ -46,7 +46,7 @@ public class IntakeSnakeSubsystem extends SubsystemBase {
     }
 
 public boolean IRDetectsBall() { 
-    if (frameIncrementer >= 50) { //Checks once(out of two required checks) every 50 frames
+    if (frameIncrementer >= 25) { //Checks once(out of two required checks) every 50 frames
         frameIncrementer = 0; //Resets the timing
         if (IRSensor.get()) {
             lastConditional = true;
