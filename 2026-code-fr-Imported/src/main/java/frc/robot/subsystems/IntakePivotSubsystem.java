@@ -38,7 +38,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
     
     
     public void intakePivotDown(double speed) {
-        if(intakePivot.getEncoder().getPosition() < (intakeZero + 1.25)) {
+        if(intakePivot.getEncoder().getPosition() < (intakeZero + 1.6)) {
         intakePivot.set(speed);
         System.out.println("Position: " + intakePivot.getEncoder().getPosition()); //Code to determine the position of the encoder
          } else {
