@@ -23,6 +23,8 @@ import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SPI;
 import com.studica.frc.AHRS;
+
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -52,6 +54,8 @@ public class DriveSubsystem extends SubsystemBase {
   //private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
   private AHRS ahrs = new AHRS(AHRS.NavXComType.kMXP_SPI);
   
+  //Limelight Fieldmap
+  private final Field2d field2d = new Field2d();
 
   double degrees = -ahrs.getYaw();
 
@@ -86,6 +90,10 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+
+    //Adds fieldmap to smart dashboard
+    field2d.setRobotPose(m_odometry.getPoseMeters());
+    SmartDashboard.putData(field2d);
   }
 
   /**
