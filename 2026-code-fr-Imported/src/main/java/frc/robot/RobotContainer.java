@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -42,6 +43,7 @@ import frc.robot.subsystems.IntakePivotSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.HookSubsystem;
+//import com.lib.pathplanner.path.test;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -64,15 +66,18 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
+  //private final PathPlannerPath autoChooser;
+  
 
   public RobotContainer() {
     //Pathplanner
     /*
     NamedCommands.registerCommand(
-      "PathPlannerTest",
-      Commands.sequence(
+      "Btm - Mid",
+      Commands.Sequence(
       m_robotShoot.shooterSet(.8),
-      Commands.waitSeconds(8)
+      Commands.waitSeconds(8),
+      m_robotFeeder.feederSet(-1)
       )
     );
 
@@ -80,7 +85,6 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser();    //Needed for Pathplanner
     SmartDashboard.putData("Auto Chooser", autoChooser);
     */
-
     configureButtonBindings();
   }
   /**
