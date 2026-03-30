@@ -46,16 +46,28 @@ public class IntakeSnakeSubsystem extends SubsystemBase {
     }
 
 public boolean IRDetectsBall() { 
-    if (frameIncrementer >= 25) { //Checks once(out of two required checks) every 50 frames
+    if (frameIncrementer >= 25) { //Checks once(out of two required checks) every 25 frames
         frameIncrementer = 0; //Resets the timing
-        if (IRSensor.get()) {
-            lastConditional = false;
-            System.out.println("IR Sensor does not detect ball");
-            return false;
-        } else {
-            lastConditional = true;
-            System.out.println("IR Sensor detects ball");
-            return true;
+        if (!IRSensor.get()) { //If a ball is detected
+            lastIRDetects = true;
+            if (lastIRDetects){ //If a ball was detected last check
+                System.out.println("IR Sensor detects a ball");
+                lastConditional = true;
+                return true;
+            } else { //If a ball wasn't detected last check
+                System.out.println("IR Sensor");
+                return lastConditional;
+            }
+        } else { //If a ball is not detected
+            lastIRDetects = false;
+            if (lastIRDetects){ //If a ball was detected last check
+                System.out.println("IR Sensor detects a ball");
+                return lastConditional;
+            } else { //If a ball wasn't detected last check
+                System.out.println("IR Sensor");
+                lastConditional = false;
+                return false;
+            }
         }
     } else {
         frameIncrementer++;
