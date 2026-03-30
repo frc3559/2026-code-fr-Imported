@@ -141,7 +141,7 @@ public class RobotContainer {
 
     m_driverController.leftBumper().whileTrue(runEnd(() -> m_robotDrive.drive(m_driverController.getLeftY(), /* LimelightHelpers.getTY("limelight") * -0.1, */ m_driverController.getLeftX(),LimelightHelpers.getTX("limelight") * -0.05, false), () -> m_robotDrive.drive(0,0,0,false)));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.4), () -> m_robotShoot.stopShooter())); //old shooting code
-   //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
+    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotFeeder.feederSet(0)));
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, .2, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
     m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.1), () -> m_robotIntakePivot.intakePivotUp(0)));
