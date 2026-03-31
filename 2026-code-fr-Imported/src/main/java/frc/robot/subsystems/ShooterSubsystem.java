@@ -53,8 +53,7 @@ public class ShooterSubsystem  extends SubsystemBase {
     } */
 
     public boolean isReady() { //Panic code
-        if (shooterIncrementer >= 50) {
-            shooterIncrementer = 0;
+        if (shooterIncrementer >= 100) {
             return true;
         } else {
             shooterIncrementer++;
