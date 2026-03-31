@@ -6,11 +6,16 @@ package frc.robot;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -28,11 +33,13 @@ public class Robot extends TimedRobot {
   private HookSubsystem m_Hook;
 
   private ElevatorSubsystem m_elevator;
+
+  private DriveSubsystem m_robotDrive;
   
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
+ XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -42,7 +49,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
     try{
       m_robotIntakePivot = new IntakePivotSubsystem(); //Initializes the intake pivot subsystem so that we can read the encoder value in the next line
       m_robotIntakePivot.readIntakePivotEncoder(); //Calls the readIntakePivotEncoder method in Intake Pivot
@@ -89,6 +95,18 @@ public class Robot extends TimedRobot {
     //Limelight
     double omegaRps = Units.degreesToRotations(m_robotContainer.m_robotDrive.getTurnRate());
     var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
+    new Trigger(m_driverController::getLeftBumper)
+    .whileTrue(new RunCommand(
+      () -> m_robotDrive.drive(
+        -m_driverController.getLeftY(),
+        // LimelightHelpers.getTY("limelight"0 * -0.1,
+        -m_driverController.getLeftX(),
+        LimelightHelpers.getTX("limelight") * -0.05,
+        false
+      ),
+      m_robotDrive
+  ));
 
     if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
       m_robotContainer.m_robotDrive.resetOdometry(llMeasurement.pose);
