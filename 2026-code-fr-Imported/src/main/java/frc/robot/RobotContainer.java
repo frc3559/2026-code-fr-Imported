@@ -150,8 +150,8 @@ public class RobotContainer {
 
     //Controller Inputs
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.4), () -> m_robotShoot.stopShooter())); //old shooting code
-    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
-    m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotFeeder.feederSet(0)));
+   //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
+    m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotShoot.resetIncrementer()));
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, .2, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
     m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.1), () -> m_robotIntakePivot.intakePivotUp(0)));
     m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(0.075), () -> m_robotIntakePivot.intakePivotDown(0)));
@@ -163,6 +163,8 @@ public class RobotContainer {
   private void shootBall() { //This will run when the shooter motors get up to speed
     if (m_robotShoot.isReady()) {
         m_robotFeeder.feederSet(-1);
+    } else {
+      m_robotFeeder.feederSet(0);
     }
   }
   /**
