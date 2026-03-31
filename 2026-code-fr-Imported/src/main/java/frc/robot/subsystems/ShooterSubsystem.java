@@ -18,7 +18,7 @@ public class ShooterSubsystem  extends SubsystemBase {
     private double currentSetSpeed1;
     private double currentSetSpeed2;
     private double maxSpeed = .5;*/
-    private boolean lastSpeedReady = false;
+    private int shooterIncrementer = 0;
 
     public ShooterSubsystem() {
         shooterEncoder1 = shooterMotor1.getEncoder();
@@ -34,7 +34,7 @@ public class ShooterSubsystem  extends SubsystemBase {
     } 
 
     // This function returns true once motors are spun up and ready to fire
-    public boolean isReady() { //Will only return true if the encoder reports sufficient speed twice in a row, meaning reading spikes won't make it fire prematurely
+    /*public boolean isReady() { //Will only return true if the encoder reports sufficient speed twice in a row, meaning reading spikes won't make it fire prematurely
         double shooter1Speed = shooterEncoder1.getVelocity();
         double shooter2Speed = shooterEncoder2.getVelocity();
         if (Math.abs(shooter1Speed) > minSpeed && Math.abs(shooter2Speed) > minSpeed) { //If both motors are running at least at minSpeed, then isReady returns true
@@ -50,11 +50,21 @@ public class ShooterSubsystem  extends SubsystemBase {
             lastSpeedReady = false;
             return false;
         }
-    } 
+    } */
 
-   /* public boolean isReady() { //Panic code
-        return true;
-    }*/
+    public boolean isReady() { //Panic code
+        if (shooterIncrementer >= 50) {
+            shooterIncrementer = 0;
+            return true;
+        } else {
+            shooterIncrementer++;
+            return false;
+        }
+    }
+
+    public void resetIncrementer() {
+        shooterIncrementer = 0;
+    }
     
 
     public void stopShooter() {
