@@ -106,7 +106,7 @@ public class RobotContainer {
                 true),
             m_robotDrive));
   }
-
+//We want to round out the drive curve but don't know where to add it.
   public void SetHook(HookSubsystem hk) {
     m_robotHook = hk;
 }
