@@ -149,7 +149,7 @@ public class RobotContainer {
     */
 
     //Controller Inputs
-    m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.4), () -> m_robotShoot.stopShooter())); //old shooting code
+    m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> dontFeed()));
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, .2, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
