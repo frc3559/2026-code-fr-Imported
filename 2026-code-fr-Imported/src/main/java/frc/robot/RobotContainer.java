@@ -152,9 +152,11 @@ public class RobotContainer {
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.4), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotShoot.resetIncrementer()));
-    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, .2, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
-    m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.1), () -> m_robotIntakePivot.intakePivotUp(0)));
-    m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(0.075), () -> m_robotIntakePivot.intakePivotDown(0)));
+    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(2, .4, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
+    m_operatorController.rightBumper().whileTrue(runEnd(() -> unjamBall(), () -> emptyMethod()));
+    m_operatorController.leftBumper().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(-1.5, -.3, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
+    m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.2), () -> m_robotIntakePivot.intakePivotUp(0)));
+    m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(0.15), () -> m_robotIntakePivot.intakePivotDown(0)));
     //m_operatorController.a().whileTrue(runEnd(() -> m_robotElevate.elevatorUp(0.25), () -> m_robotElevate.elevatorUp(0)));
     //m_operatorController.y().whileTrue(runEnd(() -> m_robotElevate.elevatorDown(-0.25), () -> m_robotElevate.elevatorDown(0)));
     //m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookUp(0.1), () -> m_robotHook.hookUp(-0.1)));
@@ -166,6 +168,14 @@ public class RobotContainer {
     } else {
       m_robotFeeder.feederSet(0);
     }
+  }
+
+  private void unjamBall() { //This will run when the shooter motors get up to speed
+        m_robotFeeder.feederSet(1);
+  }
+
+  private void emptyMethod()  { //Just don't question it
+
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

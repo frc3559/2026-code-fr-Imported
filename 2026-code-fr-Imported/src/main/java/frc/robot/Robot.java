@@ -95,7 +95,7 @@ public class Robot extends TimedRobot {
     //Limelight
     double omegaRps = Units.degreesToRotations(m_robotContainer.m_robotDrive.getTurnRate());
     var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-
+/*
     new Trigger(m_driverController::getLeftBumper)
     .whileTrue(new RunCommand(
       () -> m_robotDrive.drive(
@@ -107,7 +107,7 @@ public class Robot extends TimedRobot {
       ),
       m_robotDrive
   ));
-
+*/
     if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
       m_robotContainer.m_robotDrive.resetOdometry(llMeasurement.pose);
     }
