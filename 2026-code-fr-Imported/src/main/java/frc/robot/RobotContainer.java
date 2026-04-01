@@ -149,9 +149,9 @@ public class RobotContainer {
     */
 
     //Controller Inputs
-    m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.4), () -> m_robotShoot.stopShooter())); //old shooting code
+    m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
-    m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> m_robotShoot.resetIncrementer()));
+    m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> dontFeed()));
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(2, .4, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
     m_operatorController.rightBumper().whileTrue(runEnd(() -> unjamBall(), () -> emptyMethod()));
     m_operatorController.leftBumper().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(-1.5, -.3, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
@@ -162,6 +162,11 @@ public class RobotContainer {
     //m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookUp(0.1), () -> m_robotHook.hookUp(-0.1)));
   }
  
+private void dontFeed() {
+    m_robotShoot.resetIncrementer();
+    m_robotFeeder.feederSet(0);
+}
+
   private void shootBall() { //This will run when the shooter motors get up to speed
     if (m_robotShoot.isReady()) {
         m_robotFeeder.feederSet(-1);
