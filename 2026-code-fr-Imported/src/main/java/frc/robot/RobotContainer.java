@@ -192,10 +192,6 @@ private void stopUnjamBall() { //This will run when the shooter motors get up to
         m_robotShoot.stopShooter();
   }
 
-
-  private void emptyMethod()  { //Just don't question it
-
-  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
