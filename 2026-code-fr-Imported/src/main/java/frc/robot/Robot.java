@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.pathfinding.Pathfinding;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -28,6 +30,8 @@ import frc.robot.subsystems.DriveSubsystem;
  */
 
 public class Robot extends TimedRobot {
+
+
   private IntakePivotSubsystem m_robotIntakePivot;
 
   private HookSubsystem m_Hook;
@@ -95,7 +99,7 @@ public class Robot extends TimedRobot {
     //Limelight
     double omegaRps = Units.degreesToRotations(m_robotContainer.m_robotDrive.getTurnRate());
     var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-
+/*
     new Trigger(m_driverController::getLeftBumper)
     .whileTrue(new RunCommand(
       () -> m_robotDrive.drive(
@@ -107,7 +111,7 @@ public class Robot extends TimedRobot {
       ),
       m_robotDrive
   ));
-
+*/
     if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
       m_robotContainer.m_robotDrive.resetOdometry(llMeasurement.pose);
     }
