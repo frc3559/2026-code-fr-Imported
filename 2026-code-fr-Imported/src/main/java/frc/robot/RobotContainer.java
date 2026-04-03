@@ -152,7 +152,7 @@ public class RobotContainer {
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> dontFeed()));
-    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(2.75, .15, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));//first num is snake, second num is intake
+    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(3.5, .15, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));//first num is snake, second num is intake
    
    
     //this reverses the snake to unjam 
