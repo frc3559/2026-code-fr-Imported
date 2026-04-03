@@ -238,11 +238,12 @@ private void stopUnjamBall() { //This will run when the shooter motors get up to
 
   public Command getAutonomousCommand() {
     Command shootcmd = new ParallelCommandGroup(
-      runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter()),
-      waitSeconds(2).andThen(runEnd(() -> shootBall(), () -> dontFeed()))
+      runEnd(() -> m_robotShoot.shooterSet(.3), () -> m_robotShoot.stopShooter()),
+      runEnd(() -> shootBall(), () -> dontFeed()),
+      waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(3.5, .15, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)))//first num is snake, second num is intake
     ).withTimeout(10);
 
-    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false)).withTimeout(0.5);
+    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false), m_robotDrive).withTimeout(0.5);
 
     return sequence(
       drivecmd,
