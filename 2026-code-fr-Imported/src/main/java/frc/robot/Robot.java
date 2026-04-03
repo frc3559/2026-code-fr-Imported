@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -30,6 +32,7 @@ import frc.robot.subsystems.DriveSubsystem;
  */
 
 public class Robot extends TimedRobot {
+
 
 
   private IntakePivotSubsystem m_robotIntakePivot;
@@ -97,8 +100,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     //Limelight
-    double omegaRps = Units.degreesToRotations(m_robotContainer.m_robotDrive.getTurnRate());
-    var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
 /*
     new Trigger(m_driverController::getLeftBumper)
     .whileTrue(new RunCommand(
@@ -111,11 +113,7 @@ public class Robot extends TimedRobot {
       ),
       m_robotDrive
   ));
-*/
-    if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
-      m_robotContainer.m_robotDrive.resetOdometry(llMeasurement.pose);
-    }
-  }
+*/  
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
