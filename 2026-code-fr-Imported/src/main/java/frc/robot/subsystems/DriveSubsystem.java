@@ -11,6 +11,7 @@ import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -19,9 +20,15 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.proto.Kinematics;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SPI;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -57,6 +64,8 @@ public class DriveSubsystem extends SubsystemBase {
   //Limelight Fieldmap
   private final Field2d field2d = new Field2d();
 
+  private RobotConfig robotConfig;
+
   double degrees = -ahrs.getYaw();
 
   // Odometry class for tracking robot pose
@@ -74,6 +83,14 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+
+    // parse pp config
+        // use try method to get GUI settings for robotConfig
+    try {
+      robotConfig = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -106,6 +123,40 @@ public class DriveSubsystem extends SubsystemBase {
   }
   
   /**
+   * Configures the PP AutoBuilder with the robot intrinsics. Call before
+   * constructing any autos.
+   */
+  public void runAutoBuilder() {
+    AutoBuilder.configure(
+        this::getPose, // Robot pose supplier
+        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        (speeds, feedforwards) -> drive(0, 0, 0, false), // Method that will drive the
+                                                                                           // robot given ROBOT RELATIVE
+        // ChassisSpeeds. Also optionally outputs individual module
+        // feedforwards
+        new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic
+                                        // drive trains
+            new PIDConstants(8, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(8, 0.0, 0.0) // Rotation PID constants
+        ),
+        robotConfig, // The robot configuration
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+  }
+
+  /**
    * Resets the odometry to the specified pose.
    *
    * @param pose The pose to which to set the odometry.
@@ -122,6 +173,16 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
+  public ChassisSpeeds getRobotRelativeSpeeds() {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(getStates());
+  }
+/*
+
+  public Command applyRequest(Supplier<SwerveRequest> request) {
+    return run(() -> this.setControl(request.get()));
+  }
+
+  */
   /**
    * Method to drive the robot using joystick info.
    *
@@ -194,6 +255,20 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return Rotation2d.fromDegrees(-ahrs.getAngle()).getDegrees();
+  }
+
+    /**
+   * Get the states of the drivetrain in an array of SwerveModuleStates.
+   * 
+   * @return The array.
+   */
+  public SwerveModuleState[] getStates() {
+    return new SwerveModuleState[] {
+        m_frontLeft.getState(),
+        m_frontRight.getState(),
+        m_rearLeft.getState(),
+        m_rearRight.getState()
+    };
   }
 
   /**

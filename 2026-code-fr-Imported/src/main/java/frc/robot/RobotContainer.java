@@ -5,6 +5,8 @@
 package frc.robot;
 
 import static edu.wpi.first.wpilibj2.command.Commands.runEnd;
+import static edu.wpi.first.wpilibj2.command.Commands.sequence;
+import static edu.wpi.first.wpilibj2.command.Commands.waitSeconds;
 
 import java.util.List;
 
@@ -21,13 +23,16 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -53,7 +58,7 @@ import frc.robot.subsystems.HookSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems
-  public DriveSubsystem m_robotDrive = new DriveSubsystem();    //Keep public for Limelight
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem();    //Keep public for Limelight
   private ShooterSubsystem m_robotShoot = new ShooterSubsystem();
   //private final ElevatorSubsystem m_robotElevate //= new ElevatorSubsystem();
   private IntakeSnakeSubsystem m_robotIntakeSnake = new IntakeSnakeSubsystem();
@@ -147,7 +152,46 @@ public class RobotContainer {
       LimelightHelpers.getTX("limelight") * -0.05, false),
       () -> m_robotDrive.drive(0,0,0,false)));
     */
+/*
+    m_robotDrive.setDefaultCommand(
+      m_robotDrive.applyRequest(() ->
+        drive.withVelocityX(-m_driverController.getLeftY() * kMaxSpeedMetersPerSecond)
+              .withVelocityY(-m_driverController.getLeftX() * kMaxSpeedMetersPerSecond)
+              .withRotationalRate(-m_driverController.getRightX() * kMaxAngularSpeed)
+      )
+    );
 
+    m_driverController.leftBumper().whileTrue(
+      new RunCommand(
+        () -> {
+          int[] allowedTags = {25, 26, 21, 24, 27, 18, 19, 20, 3, 4, 11, 2, 10, 9, 8, 5};
+
+          int currentTagID = (int) LimelightHelpers.getFiducialID("limelight-jasper"); //add 2nd
+          double rotationRate = 0;
+          double velocityX = -m_driverController.getLeftY() * kMaxSpeedMetersPerSecond;
+          double velocityY = -m_driverController.getLeftX() * kMaxSpeedMetersPerSecond;
+
+          boolean isAllowedTag = false;
+          for (int allowedTag : allowedTags) {
+            if (currentTagID == allowedTag) {
+              isAllowedTag = true;
+              break;
+            }
+          }
+          if (isAllowedTag && LimelightHelpers.getTV("limelight-jasper")) {
+            rotationRate = LimelightHelpers.getTX("limelight-jasper") * -0.06;
+          }
+
+          m_robotDrive.setControl(
+            drive.xSpeedDelivered(velocityX)
+            .ySpeedDelivered(velocityY)
+            .rotDelivered(rotationRate)
+          );
+      },
+      m_robotDrive
+      )
+    );
+*/
     //Controller Inputs
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
@@ -190,6 +234,20 @@ private void stopUnjamBall() { //This will run when the shooter motors get up to
         m_robotIntakeSnake.intakeSnake(0,0, m_robotFeeder.isRunning());
         //m_robotShoot.shooterSet(0);
         m_robotShoot.stopShooter();
+  }
+
+  public Command getAutonomousCommand() {
+    Command shootcmd = new ParallelCommandGroup(
+      runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter()),
+      waitSeconds(2).andThen(runEnd(() -> shootBall(), () -> dontFeed()))
+    ).withTimeout(10);
+
+    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false)).withTimeout(0.5);
+
+    return sequence(
+      drivecmd,
+      shootcmd
+    );
   }
 
   /**
