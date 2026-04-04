@@ -20,6 +20,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.proto.Kinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -28,6 +30,9 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SPI;
+
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Radians;
 
 import java.util.function.Supplier;
 
@@ -158,6 +163,20 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumberArray("robotPose", new double[]{
       pose.getX(), pose.getY()
     });
+  }
+
+  public Distance getHubDistance(Translation2d hub) {
+    Translation2d ourPosition =  m_PoseEstimator.getEstimatedPosition().getTranslation();
+
+    return Meters.of(ourPosition.getDistance(hub));
+  }
+
+  public Angle getHubHeading(Translation2d hub) {
+    Translation2d ourPosition =  m_PoseEstimator.getEstimatedPosition().getTranslation();
+
+    Translation2d direction = hub.minus(ourPosition);
+
+    return Radians.of(Math.atan2(direction.getY(), direction.getX()));
   }
 
   /**
