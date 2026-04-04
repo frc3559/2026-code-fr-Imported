@@ -1,8 +1,12 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -29,22 +33,36 @@ public class RobotDrive extends Command{
         m_hubPosition = Constants.HubPositions.getHubPosition(DriverStation.getAlliance().orElse(Alliance.Blue));
     }
 
+    private static final double MAX_TURN_SPEED = 1.0
+
     @Override
     public void execute() {
         boolean isAiming = m_driverController.getAButton();
     
         if (isAiming) {
-            Angle heading = m_drive.getHubHeading(m_hubPosition);
-        }
-    
-        m_drive.drive(
-            -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY()/*  + )*/, OIConstants.kDriveDeadband),
-            -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX()/*  + )*/, OIConstants.kDriveDeadband),
-            -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-            true
+            Angle targetHeading = m_drive.getHubHeading(m_hubPosition);
+            Angle robotHeading = m_drive.getPose().getRotation().getMeasure();
+
+            Angle error = targetHeading.minus(robotHeading).unaryMinus();
+            double factor = error.in(Rotations) * 2.0;
+
+            m_drive.drive(
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY()/*  + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX()/*  + )*/, OIConstants.kDriveDeadband),
+                factor,
+                isAiming
             );
+        } else {
+    
+            m_drive.drive(
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY()/*  + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX()/*  + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                true
+            );
+        }
     }
-        
+
     @Override
     public void end(boolean interrupted) {
 
