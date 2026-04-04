@@ -71,6 +71,8 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
+  private double drivespeedmult = OIConstants.kTeleopMaxSpeedMPS;
+
   //private final PathPlannerPath autoChooser;
   
 
@@ -105,8 +107,8 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY()/*  + )*/, OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX()/*  + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
@@ -191,7 +193,11 @@ public class RobotContainer {
       m_robotDrive
       )
     );
+
+    
 */
+
+    m_driverController.rightBumper().whileTrue(runEnd(() -> drivespeedmult = DriveConstants.kMaxSpeedMetersPerSecond, () -> drivespeedmult = OIConstants.kTeleopMaxSpeedMPS));
     //Controller Inputs
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
