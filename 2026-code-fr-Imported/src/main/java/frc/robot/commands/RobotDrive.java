@@ -33,7 +33,7 @@ public class RobotDrive extends Command{
         m_hubPosition = Constants.HubPositions.getHubPosition(DriverStation.getAlliance().orElse(Alliance.Blue));
     }
 
-    private static final double MAX_TURN_SPEED = 1.0
+    private static final double MAX_TURN_SPEED = 1.0;
 
     @Override
     public void execute() {
