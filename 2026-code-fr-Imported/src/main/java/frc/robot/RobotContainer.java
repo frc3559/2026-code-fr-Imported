@@ -207,7 +207,7 @@ public class RobotContainer {
 */
 
 //Controller Inputs
-    m_driverController.a().whileTrue(runEnd(() -> drivespeedmult = 1, () -> drivespeedmult = 0.5));
+    m_driverController.rightTrigger().whileTrue(runEnd(() -> drivespeedmult = 1, () -> drivespeedmult = 0.5));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> dontFeed()));
