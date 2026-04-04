@@ -154,6 +154,10 @@ public class DriveSubsystem extends SubsystemBase {
     //Adds fieldmap to smart dashboard
     field2d.setRobotPose(getPose());
     SmartDashboard.putData(field2d);
+    var pose = getPose();
+    SmartDashboard.putNumberArray("robotPose", new double[]{
+      pose.getX(), pose.getY()
+    });
   }
 
   /**
