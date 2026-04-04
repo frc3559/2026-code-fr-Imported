@@ -247,9 +247,9 @@ private void stopUnjamBall() { //This will run when the shooter motors get up to
       runEnd(() -> m_robotShoot.shooterSet(.3), () -> m_robotShoot.stopShooter()),
       runEnd(() -> shootBall(), () -> dontFeed()),
       waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(3.5, .15, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)))//first num is snake, second num is intake
-    ).withTimeout(10);
+    );
 
-    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false), m_robotDrive).withTimeout(0.6).andThen(Commands.run(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive));
+    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false), m_robotDrive).withTimeout(0.6).andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive));
 
     return sequence(
       drivecmd,
