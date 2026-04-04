@@ -71,7 +71,7 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private double drivespeedmult = OIConstants.kTeleopMaxSpeedMPS;
+  private double drivespeedmult = 0.5;
 
   //private final PathPlannerPath autoChooser;
   
@@ -197,8 +197,8 @@ public class RobotContainer {
     
 */
 
-    m_driverController.a().whileTrue(runEnd(() -> drivespeedmult = DriveConstants.kMaxSpeedMetersPerSecond, () -> drivespeedmult = OIConstants.kTeleopMaxSpeedMPS));
-    //Controller Inputs
+//Controller Inputs
+    m_driverController.a().whileTrue(runEnd(() -> drivespeedmult = 1, () -> drivespeedmult = 0.5));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> dontFeed()));

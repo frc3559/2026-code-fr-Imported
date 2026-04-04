@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -194,8 +195,8 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeed;
-    double ySpeedDelivered = ySpeed;
+    double xSpeedDelivered = xSpeed * OIConstants.kTeleopMaxSpeedMPS;
+    double ySpeedDelivered = ySpeed * OIConstants.kTeleopMaxSpeedMPS;
     double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
