@@ -71,6 +71,8 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
+  private double drivespeedmult = 0.5;
+
   //private final PathPlannerPath autoChooser;
   
 
@@ -105,8 +107,8 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY()/*  + )*/, OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX()/*  + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
@@ -191,8 +193,12 @@ public class RobotContainer {
       m_robotDrive
       )
     );
+
+    
 */
-    //Controller Inputs
+
+//Controller Inputs
+    m_driverController.a().whileTrue(runEnd(() -> drivespeedmult = 1, () -> drivespeedmult = 0.5));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> dontFeed()));
@@ -241,9 +247,9 @@ private void stopUnjamBall() { //This will run when the shooter motors get up to
       runEnd(() -> m_robotShoot.shooterSet(.3), () -> m_robotShoot.stopShooter()),
       runEnd(() -> shootBall(), () -> dontFeed()),
       waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)))//first num is snake, second num is intake
-    ).withTimeout(10);
+    );
 
-    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false), m_robotDrive).withTimeout(0.6).andThen(Commands.run(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive));
+    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false), m_robotDrive).withTimeout(0.6).andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive));
 
     return sequence(
       drivecmd,
