@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -18,13 +19,25 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.proto.Kinematics;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.Constants.OIConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SPI;
+
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Radians;
+
+import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -69,6 +82,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   double degrees = -ahrs.getYaw();
 
+  public final SwerveDrivePoseEstimator m_PoseEstimator;
+  private final Supplier<PoseEstimate> m_getLeftVisionPose;
+  private final Supplier<PoseEstimate> m_getRightVisionPose;
+
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
@@ -81,7 +99,10 @@ public class DriveSubsystem extends SubsystemBase {
       });
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public DriveSubsystem(Supplier<PoseEstimate> getLeftVisionPose, Supplier<PoseEstimate> getRightVisionPose) {
+    m_getLeftVisionPose = getLeftVisionPose;
+    m_getRightVisionPose = getRightVisionPose;
+
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
 
@@ -92,6 +113,16 @@ public class DriveSubsystem extends SubsystemBase {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
+    m_PoseEstimator = new SwerveDrivePoseEstimator(
+      DriveConstants.kDriveKinematics,
+      Rotation2d.fromDegrees(getHeading()),
+      getSwervePositions(),
+      Pose2d.kZero
+    );
+
+    m_PoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7, 99999999));
+
   }
 
   @Override
@@ -109,9 +140,46 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
 
+        
+    m_PoseEstimator.update(
+      Rotation2d.fromDegrees(getHeading()),
+      getSwervePositions()
+    );
+
+        double omegaRps = Units.degreesToRotations(getTurnRate());
+    var llMeasurementLeft = m_getLeftVisionPose.get();
+    var llMeasurementRight = m_getRightVisionPose.get();
+
+    if (llMeasurementLeft != null && llMeasurementLeft.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
+      resetOdometry(llMeasurementLeft.pose);
+      m_PoseEstimator.addVisionMeasurement(llMeasurementLeft.pose, llMeasurementLeft.timestampSeconds);
+    }
+    if (llMeasurementRight != null && llMeasurementRight.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
+      resetOdometry(llMeasurementRight.pose);
+      m_PoseEstimator.addVisionMeasurement(llMeasurementRight.pose,llMeasurementRight.timestampSeconds);
+    }
+
     //Adds fieldmap to smart dashboard
-    field2d.setRobotPose(m_odometry.getPoseMeters());
+    field2d.setRobotPose(getPose());
     SmartDashboard.putData(field2d);
+    var pose = getPose();
+    SmartDashboard.putNumberArray("robotPose", new double[]{
+      pose.getX(), pose.getY()
+    });
+  }
+
+  public Distance getHubDistance(Translation2d hub) {
+    Translation2d ourPosition =  m_PoseEstimator.getEstimatedPosition().getTranslation();
+
+    return Meters.of(ourPosition.getDistance(hub));
+  }
+
+  public Angle getHubHeading(Translation2d hub) {
+    Translation2d ourPosition =  m_PoseEstimator.getEstimatedPosition().getTranslation();
+
+    Translation2d direction = hub.minus(ourPosition);
+
+    return Radians.of(Math.atan2(direction.getY(), direction.getX()));
   }
 
   /**
@@ -120,7 +188,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_PoseEstimator.getEstimatedPosition();
   }
   
   /**
@@ -174,16 +242,26 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
+  public SwerveModulePosition[] getSwervePositions() {
+    return
+     new SwerveModulePosition[] {
+        m_frontLeft.getPosition(),
+        m_frontRight.getPosition(),
+        m_rearLeft.getPosition(),
+        m_rearRight.getPosition()
+        };
+  }
+
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(getStates());
   }
-/*
 
+/*
   public Command applyRequest(Supplier<SwerveRequest> request) {
     return run(() -> this.setControl(request.get()));
   }
+*/
 
-  */
   /**
    * Method to drive the robot using joystick info.
    *

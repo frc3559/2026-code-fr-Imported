@@ -5,18 +5,23 @@
 package frc.robot;
 
 import static edu.wpi.first.wpilibj2.command.Commands.runEnd;
+import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 import static edu.wpi.first.wpilibj2.command.Commands.sequence;
 import static edu.wpi.first.wpilibj2.command.Commands.waitSeconds;
 
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialArray;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -58,7 +63,7 @@ import frc.robot.subsystems.HookSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems
-  public final DriveSubsystem m_robotDrive = new DriveSubsystem();    //Keep public for Limelight
+  public final DriveSubsystem m_robotDrive;    //Keep public for Limelight
   private ShooterSubsystem m_robotShoot = new ShooterSubsystem();
   //private final ElevatorSubsystem m_robotElevate //= new ElevatorSubsystem();
   private IntakeSnakeSubsystem m_robotIntakeSnake = new IntakeSnakeSubsystem();
@@ -77,6 +82,10 @@ public class RobotContainer {
   
 
   public RobotContainer() {
+    m_robotDrive =  new DriveSubsystem(
+      () -> LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left"),
+      () -> LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-right")
+    );
     //Pathplanner
     /*
     NamedCommands.registerCommand(
@@ -146,7 +155,7 @@ public class RobotContainer {
     */
     
     /*
-    //Limelight Controller Inputs         Moved to periodic
+    //Limelight Controller Inputs
     m_driverController.leftBumper().whileTrue(runEnd(() -> m_robotDrive.drive
       (m_driverController.getLeftY(),
     //LimelightHelpers.getTY("limelight") * -0.1,
@@ -162,7 +171,7 @@ public class RobotContainer {
               .withRotationalRate(-m_driverController.getRightX() * kMaxAngularSpeed)
       )
     );
-
+    
     m_driverController.leftBumper().whileTrue(
       new RunCommand(
         () -> {
@@ -170,8 +179,8 @@ public class RobotContainer {
 
           int currentTagID = (int) LimelightHelpers.getFiducialID("limelight-jasper"); //add 2nd
           double rotationRate = 0;
-          double velocityX = -m_driverController.getLeftY() * kMaxSpeedMetersPerSecond;
-          double velocityY = -m_driverController.getLeftX() * kMaxSpeedMetersPerSecond;
+          double velocityX = -m_driverController.getLeftY() * MaxSpeed;
+          double velocityY = -m_driverController.getLeftX() * MaxSpeed;
 
           boolean isAllowedTag = false;
           for (int allowedTag : allowedTags) {
@@ -198,29 +207,33 @@ public class RobotContainer {
 */
 
 //Controller Inputs
-    m_driverController.a().whileTrue(runEnd(() -> drivespeedmult = 1, () -> drivespeedmult = 0.5));
+    m_driverController.rightTrigger().whileTrue(runEnd(() -> drivespeedmult = 1, () -> drivespeedmult = 0.5));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //old shooting code
    //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> dontFeed()));
     m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, .15, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));//first num is snake, second num is intake
    
-   
+    
     //this reverses the snake to unjam 
      m_operatorController.rightBumper().whileTrue(runEnd(() -> unjamBall(), () -> stopUnjamBall()));
     //m_operatorController.leftBumper().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(-1.5, -.3, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));
     
-    
+
     m_operatorController.povUp().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotUp(-0.2), () -> m_robotIntakePivot.intakePivotUp(0)));
     m_operatorController.povDown().whileTrue(runEnd(() -> m_robotIntakePivot.intakePivotDown(0.15), () -> m_robotIntakePivot.intakePivotDown(0)));
     //m_operatorController.a().whileTrue(runEnd(() -> m_robotElevate.elevatorUp(0.25), () -> m_robotElevate.elevatorUp(0)));
     //m_operatorController.y().whileTrue(runEnd(() -> m_robotElevate.elevatorDown(-0.25), () -> m_robotElevate.elevatorDown(0)));
     //m_operatorController.b().whileTrue(runEnd(() -> m_robotHook.hookUp(0.1), () -> m_robotHook.hookUp(-0.1)));
+
+    //Limelight
+    //m_driverController.a(),whileTrue(runEnd(() -> m_robotDrive.))
+      
   }
  
-private void dontFeed() {
-    m_robotShoot.resetIncrementer();
-    m_robotFeeder.feederSet(0);
-}
+  private void dontFeed() {
+      m_robotShoot.resetIncrementer();
+      m_robotFeeder.feederSet(0);
+  }
 
   private void shootBall() { //This will run when the shooter motors get up to speed
     if (m_robotShoot.isReady()) {
@@ -243,6 +256,8 @@ private void stopUnjamBall() { //This will run when the shooter motors get up to
   }
 
   public Command getAutonomousCommand() {
+
+
     Command shootcmd = new ParallelCommandGroup(
       runEnd(() -> m_robotShoot.shooterSet(.3), () -> m_robotShoot.stopShooter()),
       runEnd(() -> shootBall(), () -> dontFeed()),

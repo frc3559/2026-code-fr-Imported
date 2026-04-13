@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -101,5 +102,14 @@ public final class Constants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+
+  public static final class HubPositions {
+    public static final Translation2d BLUE = new Translation2d(4.574794, 4.034663);
+    public static final Translation2d RED = new Translation2d(4.574794 + 7.2898, 4.034663);
+
+    public static Translation2d getHubPosition(Alliance alliance) {
+      return alliance == Alliance.Blue ? BLUE : RED;
+    }
   }
 }
