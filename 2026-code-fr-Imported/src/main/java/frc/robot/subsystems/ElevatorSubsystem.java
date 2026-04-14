@@ -11,6 +11,8 @@ import com.revrobotics.PersistMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+//Elevator/Hook code is not in use
+//We never ended up adding an elevator
 
 public class ElevatorSubsystem extends SubsystemBase {
     public SparkMax elevator;
