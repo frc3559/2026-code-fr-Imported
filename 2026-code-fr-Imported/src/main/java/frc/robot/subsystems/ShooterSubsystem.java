@@ -25,6 +25,7 @@ public class ShooterSubsystem  extends SubsystemBase {
         shooterEncoder2 = shooterMotor2.getEncoder();
     }
 
+    //Shooter speed (I think)
     public void shooterSet(double speed) {
         shooterMotor1.set(speed * -1);
         shooterMotor2.set(speed);
