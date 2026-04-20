@@ -12,8 +12,7 @@ public class FeederSubsystem  extends SubsystemBase{
 
     }
 
-    public void feederSet(double speed){
-    
+    public void feederSet(double speed){ //Sets feeder speed
     feederMotor.set(speed);
     }
 

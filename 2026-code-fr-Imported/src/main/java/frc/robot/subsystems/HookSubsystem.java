@@ -2,12 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-//import com.revrobotics.spark.config.SparkBaseConfig; unnecessary
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SoftLimitConfig;
-//import com.revrobotics.spark.config.SoftLimitConfigAccessor; unnecessary
-import com.revrobotics.ResetMode;
-import com.revrobotics.PersistMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,7 +24,7 @@ public class HookSubsystem extends SubsystemBase {
 
 
     public void hookUp(double speed) {
-        if(hook.getEncoder().getPosition() < (hookZero + 0.017)) {
+        if(hook.getEncoder().getPosition() < (hookZero + 0.017)) { //Check intake pivot, it's basically the same thing
         hook.set(speed);
         System.out.println("Position: " + hook.getEncoder().getPosition()); //Code to determine the position of the encoder
         } else {

@@ -2,12 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-//import com.revrobotics.spark.config.SparkBaseConfig; unnecessary
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SoftLimitConfig;
-//import com.revrobotics.spark.config.SoftLimitConfigAccessor; unnecessary
-import com.revrobotics.ResetMode;
-import com.revrobotics.PersistMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,9 +24,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
     public void elevatorUp(double speed) {
-        if(elevator.getEncoder().getPosition() < (elevatorZero + 256)) {
+        if(elevator.getEncoder().getPosition() < (elevatorZero + 256)) { //The number here is drastically wrong, go check intakePivot for the explanation of this method
         elevator.set(speed);
-        System.out.println("Position: " + elevator.getEncoder().getPosition()); //Code to determine the position of the encoder
+        System.out.println("Position: " + elevator.getEncoder().getPosition()); //Code to print out the position of the encoder
         } else {
             elevator.set(0);
         }
@@ -40,7 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    
     
     public void elevatorDown(double speed) {
-        if(elevator.getEncoder().getPosition() > elevatorZero) {
+        if(elevator.getEncoder().getPosition() > elevatorZero) { //ditto
         elevator.set(speed);
         System.out.println("Position: " + elevator.getEncoder().getPosition()); //Code to determine the position of the encoder
         } else {

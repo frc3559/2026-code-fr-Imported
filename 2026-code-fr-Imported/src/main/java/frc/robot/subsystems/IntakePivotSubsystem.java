@@ -2,12 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-//import com.revrobotics.spark.config.SparkBaseConfig; unnecessary
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SoftLimitConfig;
-//import com.revrobotics.spark.config.SoftLimitConfigAccessor; unnecessary
-import com.revrobotics.ResetMode;
-import com.revrobotics.PersistMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -28,7 +22,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
 
     public void intakePivotUp(double speed) {
-        if(intakePivot.getEncoder().getPosition() > intakeZero) {
+        if(intakePivot.getEncoder().getPosition() > intakeZero) { //If the intake pivot is below the initialized position, set speed
         intakePivot.set(speed);
         System.out.println("Position: " + intakePivot.getEncoder().getPosition()); //Code to determine the position of the encoder
          } else {
@@ -38,7 +32,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
     
     
     public void intakePivotDown(double speed) {
-        if(intakePivot.getEncoder().getPosition() < (intakeZero + 1.6)) {
+        if(intakePivot.getEncoder().getPosition() < (intakeZero + 1.6)) { //If the intake pivot is above the lowered position, set speed
         intakePivot.set(speed);
         System.out.println("Position: " + intakePivot.getEncoder().getPosition()); //Code to determine the position of the encoder
          } else {

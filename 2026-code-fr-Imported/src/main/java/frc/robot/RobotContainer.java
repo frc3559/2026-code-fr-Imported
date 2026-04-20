@@ -9,7 +9,7 @@ import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 import static edu.wpi.first.wpilibj2.command.Commands.sequence;
 import static edu.wpi.first.wpilibj2.command.Commands.waitSeconds;
 
-import java.util.List;
+import java.util.List; //Please remove these extraneous imports if they are not being used
 
 import javax.sql.rowset.serial.SerialArray;
 
@@ -18,41 +18,20 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.units.measure.Velocity;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 //import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.IntakeSnakeSubsystem;
 import frc.robot.subsystems.IntakePivotSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.subsystems.HookSubsystem;
-import frc.robot.subsystems.HookSubsystem;
 //import com.lib.pathplanner.path.test;
 
 /*
@@ -68,7 +47,6 @@ public class RobotContainer {
   //private final ElevatorSubsystem m_robotElevate //= new ElevatorSubsystem();
   private IntakeSnakeSubsystem m_robotIntakeSnake = new IntakeSnakeSubsystem();
   private IntakePivotSubsystem m_robotIntakePivot; //= new IntakePivotSubsystem();
-  private HookSubsystem m_robotHook; //= new HookSubsystem();
   private FeederSubsystem m_robotFeeder = new FeederSubsystem();
 
 
@@ -123,9 +101,6 @@ public class RobotContainer {
             m_robotDrive));
   }
 //We want to round out the drive curve but don't know where to add it.
-  public void SetHook(HookSubsystem hk) {
-    m_robotHook = hk;
-}
 
 /*public  void SetElevator(ElevatorSubsystem m_elvtr) {
    m_robotElevate = hk;
@@ -215,7 +190,7 @@ public class RobotContainer {
     
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> shootBall(), () -> dontFeed()));     //Shooter  -  shoots the ball when at minspeed
     
-    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, .15, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)));     //Intake Speeds  -  first num is snake, second num is floor intake
+    m_operatorController.leftTrigger().whileTrue(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, .15), () -> m_robotIntakeSnake.intakeSnake(0, 0)));     //Intake Speeds  -  first num is snake, second num is floor intake
     
     m_operatorController.rightBumper().whileTrue(runEnd(() -> unjamBall(), () -> stopUnjamBall()));     //Unjammer Speed  -  reverses intake and shooter
     
@@ -252,12 +227,12 @@ public class RobotContainer {
 
   private void unjamBall() { 
         m_robotFeeder.feederSet(0.2);
-        m_robotIntakeSnake.intakeSnake(-.25,-0.0, m_robotFeeder.isRunning());//first num is snake, second num is intake
+        m_robotIntakeSnake.intakeSnake(-.25,-0.0);//first num is snake, second num is intake
         m_robotShoot.shooterSet(-.2);
   }
 private void stopUnjamBall() {
         m_robotFeeder.feederSet(0);
-        m_robotIntakeSnake.intakeSnake(0,0, m_robotFeeder.isRunning());
+        m_robotIntakeSnake.intakeSnake(0,0);
         //m_robotShoot.shooterSet(0);
         m_robotShoot.stopShooter();
   }
@@ -268,7 +243,7 @@ private void stopUnjamBall() {
     Command shootcmd = new ParallelCommandGroup(
       runEnd(() -> m_robotShoot.shooterSet(.3), () -> m_robotShoot.stopShooter()),
       runEnd(() -> shootBall(), () -> dontFeed()),
-      waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0, m_robotFeeder.isRunning()), () -> m_robotIntakeSnake.intakeSnake(0, 0, false)))//first num is snake, second num is intake
+      waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0), () -> m_robotIntakeSnake.intakeSnake(0, 0)))//first num is snake, second num is intake
     );
 
     Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false), m_robotDrive).withTimeout(0.6).andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive));

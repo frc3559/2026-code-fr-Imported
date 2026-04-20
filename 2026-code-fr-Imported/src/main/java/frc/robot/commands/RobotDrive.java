@@ -1,17 +1,14 @@
 package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -32,8 +29,6 @@ public class RobotDrive extends Command{
     public void initialize() {
         m_hubPosition = Constants.HubPositions.getHubPosition(DriverStation.getAlliance().orElse(Alliance.Blue));
     }
-
-    private static final double MAX_TURN_SPEED = 1.0;
 
     @Override
     public void execute() {
