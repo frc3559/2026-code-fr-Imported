@@ -54,7 +54,8 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private double drivespeedmult = 0.5;
+  private double drivespeedmult = 0.15;      //Robot drive speed
+  private double turnspeedmult = 0.15;     //Robot turn speed
 
   //private final PathPlannerPath autoChooser;
   
@@ -96,7 +97,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getRightX() * turnspeedmult/* + )*/, OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
   }
@@ -182,7 +183,8 @@ public class RobotContainer {
 */
 
 //Controller Inputs  -  Input Speeds
-    m_driverController.rightTrigger/*.leftBumper*/().whileTrue(runEnd(() -> drivespeedmult = 1, () -> drivespeedmult = 0.5));     //Turbo Speed  -  drives quicker
+    //This is broke, when clicking the right trigger, the robot stops driving unless if the right trigger is being held
+    //m_driverController.rightTrigger/*.leftBumper*/().whileTrue(runEnd(() -> drivespeedmult = .5, () -> drivespeedmult = 0.1));     //Turbo Speed  -  drives quicker
     
     m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter()));     //old shooting code
     
