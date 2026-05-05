@@ -186,7 +186,7 @@ public class RobotContainer {
     //This is broke, when clicking the right trigger, the robot stops driving unless if the right trigger is being held
     //m_driverController.rightTrigger/*.leftBumper*/().whileTrue(runEnd(() -> drivespeedmult = .5, () -> drivespeedmult = 0.1));     //Turbo Speed  -  drives quicker
     
-    m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter()));     //old shooting code
+    m_operatorController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter())); //Shoot Speed
     
     //m_driverController.rightTrigger().whileTrue(runEnd(() -> m_robotShoot.accelerateShooter(), () -> m_robotShoot.stopShooter()));
     
@@ -243,7 +243,7 @@ private void stopUnjamBall() {
 
 
     Command shootcmd = new ParallelCommandGroup(
-      runEnd(() -> m_robotShoot.shooterSet(.3), () -> m_robotShoot.stopShooter()),
+      runEnd(() -> m_robotShoot.shooterSet(.4), () -> m_robotShoot.stopShooter()),
       runEnd(() -> shootBall(), () -> dontFeed()),
       waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0), () -> m_robotIntakeSnake.intakeSnake(0, 0)))//first num is snake, second num is intake
     );

@@ -22,6 +22,7 @@ public class ShooterSubsystem  extends SubsystemBase {
     public void shooterSet(double speed) {
         shooterMotor1.set(speed * -1);
         shooterMotor2.set(speed);
+       //System.out.flush();  - Andrew here, sorry if this breaks everything I was just experimenting. I touched nothing else in the code.I believe this will clear past entries in the log? duno
        System.out.println("Shooter Motors set to " + speed);
        System.out.println("Shooter Motor 1 running at" + shooterEncoder1.getVelocity());
        System.out.println("Shooter Motor 2 running at" + shooterEncoder2.getVelocity());
