@@ -74,6 +74,10 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     //implementation files('C:\\navx-mxp\\java\\lib\\navx_frc.jar')
+
+    //Limelight VERY IMPORTANT
+    implementation 'org.limelightvision:limelightlib-wpijava:latest.release'
+    implementation 'edu.wpi.first.wpilibj:wpilibj:latest.release'
 }
 
 test {
