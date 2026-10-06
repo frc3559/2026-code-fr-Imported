@@ -1,0 +1,23 @@
+package frc.robot.subsystems;
+
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import org.wpilib.command2.SubsystemBase;
+
+public class FeederSubsystem  extends SubsystemBase{
+    private final SparkMax feederMotor = new SparkMax(18, MotorType.kBrushless);
+
+    public FeederSubsystem(){
+
+    }
+
+    public void feederSet(double speed){ //Sets feeder speed
+    feederMotor.set(speed);
+    }
+
+    public boolean isRunning() { //If motor is set to a speed greater than .1, this returns true
+        return (feederMotor.get() > 0.1);
+    }
+
+}
