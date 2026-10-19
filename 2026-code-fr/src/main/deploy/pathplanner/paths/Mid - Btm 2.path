@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.3003333333333336,
+        "y": 0.6439333333333332
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.300333333333334,
+        "y": 0.643933333333333
+      },
+      "isLocked": false,
+      "linkedName": "midbtm end 1"
+    },
+    {
+      "anchor": {
+        "x": 6.603700000000001,
+        "y": 0.6439333333333332
+      },
+      "prevControl": {
+        "x": 5.603700000000001,
+        "y": 0.6439333333333332
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Mid - Btm",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
