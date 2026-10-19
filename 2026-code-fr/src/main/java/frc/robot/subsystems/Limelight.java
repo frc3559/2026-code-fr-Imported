@@ -25,14 +25,27 @@ public class Limelight extends SubsystemBase {
         double botpose[] = table.getEntry("botpose_orb_wpiblue").getDoubleArray(new double[6]);
         double tx = getTx();
         boolean tv = hasTarget();
+
+        if (tv) {
+            System.out.println("Limelight Target In Range");
+        } else {
+            System.out.println("Limelight Does Not Detect Target");
+        }   //No clue if this is in the correct spot
+
         /*
-        --Get field map
-        Configure limelight dimensions
-        --Position of robot on field
-        --Get limelight values in to code
-        Track apriltags in code
-        Rotate robot towards apriltags
-        add LimelightHelpers.SetRobotOrientation/(call every frame)?
+        =: Complete
+        -: In Progress/Could be completed in seconds
+        _: Haven't Started
+        1: Right Limelight
+        2: Left Limelight
+        ------------------------------------------------------------------
+        =-Get field map
+        =-Configure limelight dimensions
+        =-Position of robot on field
+        =_Get limelight values in to code
+        -_Track apriltags in code
+        __Rotate robot towards apriltags
+        __Add LimelightHelpers.SetRobotOrientation/(call every frame)??
         */
     }
 }
