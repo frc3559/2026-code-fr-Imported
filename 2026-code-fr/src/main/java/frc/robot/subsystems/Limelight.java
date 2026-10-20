@@ -26,7 +26,7 @@ public class Limelight extends SubsystemBase {
         double tx = getTx();
         boolean tv = hasTarget();
 
-        if (tv) {
+        if (tv == true) {
             System.out.println("Limelight Target In Range");
         } else {
             System.out.println("Limelight Does Not Detect Target");

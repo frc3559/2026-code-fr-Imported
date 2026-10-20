@@ -169,13 +169,14 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
+    /*
     // Example: Get Limelight X and Y offsets
     double tx = limelightTable.getEntry("tx").getDouble(0.0); // Horizontal offset
     double ty = limelightTable.getEntry("ty").getDouble(0.0); // Vertical offset
     boolean tv = limelightTable.getEntry("tv").getDouble(0) == 1.0; // target valid
 
     System.out.println("Limelight X: " + tx + ", Y: " + ty + ", Target?: " + tv);
+    */
   }
 
   @Override
