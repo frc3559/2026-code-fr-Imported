@@ -54,8 +54,8 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private double drivespeedmult = 0.15;      //Robot drive speed
-  private double turnspeedmult = 0.15;     //Robot turn speed
+  private double drivespeedmult = 0.5;      //Robot drive speed
+  private double turnspeedmult = 0;     //Robot turn speed
 
   //private final PathPlannerPath autoChooser;
   
@@ -97,7 +97,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(/*(*/m_driverController.getRightX() * turnspeedmult/* + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getRightX()/** turnspeedmult + )*/, OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
   }
