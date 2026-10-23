@@ -55,7 +55,7 @@ public class RobotContainer {
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   private double drivespeedmult = 0.5;      //Robot drive speed
-  //private double turnspeedmult = 0;     //Robot turn speed \ Seems to be related to this issue with hte turning going 90 degrees
+  //private double turnspeedmult = 0;     //Robot turn speed \ Seems to be related to the issue with the robots' turning going 90 degrees
 
   //private final PathPlannerPath autoChooser;
   
