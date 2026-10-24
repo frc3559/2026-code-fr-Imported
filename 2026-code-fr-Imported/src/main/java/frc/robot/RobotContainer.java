@@ -19,6 +19,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -244,7 +246,7 @@ private void stopUnjamBall() {
 
     Command shootcmd = Commands.deadline(
       waitSeconds(10),
-      runEnd(() -> m_robotShoot.shooterSet(.22), () -> m_robotShoot.stopShooter()),
+      runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter()),
       runEnd(() -> shootBall(), () -> dontFeed()),
       waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0), () -> m_robotIntakeSnake.intakeSnake(0, 0))) //first num is snake, second num is intake
     );
