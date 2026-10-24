@@ -54,8 +54,8 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private double drivespeedmult = 0.3;      //Robot drive speed
-  private double turnspeedmult = 0.1;     //Robot turn speed
+  private double drivespeedmult = 1;      //Robot drive speed
+  private double turnspeedmult = 1;     //Robot turn speed
 
   //private final PathPlannerPath autoChooser;
   
@@ -210,8 +210,8 @@ public class RobotContainer {
 
 
     //Limelight
-    //m_driverController.a(),whileTrue(runEnd(() -> m_robotDrive.))
-      
+    //m_driverController.a().whileTrue(runOnce(() -> m_limelight.moveToTag())); //Doesn't seem to work?? FIX
+    //m_driverController.a().whileTrue(runEnd(() -> m_limelight.moveToTag(), () -> m_limelight.___()));      
   }
  
   private void dontFeed() {
@@ -243,12 +243,17 @@ private void stopUnjamBall() {
 
 
     Command shootcmd = new ParallelCommandGroup(
-      runEnd(() -> m_robotShoot.shooterSet(.4), () -> m_robotShoot.stopShooter()),
+      runEnd(() -> m_robotShoot.shooterSet(.37), () -> m_robotShoot.stopShooter()),
       runEnd(() -> shootBall(), () -> dontFeed()),
-      waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0), () -> m_robotIntakeSnake.intakeSnake(0, 0)))//first num is snake, second num is intake
+      waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0), () -> m_robotIntakeSnake.intakeSnake(0, 0))), //first num is snake, second num is intake
+      waitSeconds(11).andThen(runOnce(() -> m_robotShoot.stopShooter()))
     );
 
-    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false), m_robotDrive).withTimeout(0.75).andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive));
+    Command drivecmd = new RunCommand(
+      () -> m_robotDrive.drive(-1, 0, 0, false),
+      m_robotDrive).withTimeout(0.75).andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false),
+      m_robotDrive)
+    );
 
     return sequence(
       drivecmd,
