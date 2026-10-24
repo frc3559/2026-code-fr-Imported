@@ -241,9 +241,8 @@ private void stopUnjamBall() {
 
   public Command getAutonomousCommand() {
 
-
     Command shootcmd = new ParallelCommandGroup(
-      runEnd(() -> m_robotShoot.shooterSet(.37), () -> m_robotShoot.stopShooter()),
+      runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter()),
       runEnd(() -> shootBall(), () -> dontFeed()),
       waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0), () -> m_robotIntakeSnake.intakeSnake(0, 0))), //first num is snake, second num is intake
       waitSeconds(11).andThen(runOnce(() -> m_robotShoot.stopShooter()))
