@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
 
-/*
+
   @Override
   public void robotPeriodic() {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
@@ -105,27 +105,27 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    //Limelight
-    double omegaRps = Units.degreesToRotations(m_robotContainer.m_robotDrive.getTurnRate());
-    var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+  //   //Limelight
+  //   double omegaRps = Units.degreesToRotations(m_robotContainer.m_robotDrive.getTurnRate());
+  //   var llMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
 
-    new Trigger(m_driverController::getLeftBumper)
-    .whileTrue(new RunCommand(
-      () -> m_robotDrive.drive(
-        -m_driverController.getLeftY(),
-        // LimelightHelpers.getTY("limelight"0 * -0.1,
-        -m_driverController.getLeftX(),
-        LimelightHelpers.getTX("limelight") * -0.05,
-        false
-      ),
-      m_robotDrive
-  ));
+  //   new Trigger(m_driverController::getLeftBumper)
+  //   .whileTrue(new RunCommand(
+  //     () -> m_robotDrive.drive(
+  //       -m_driverController.getLeftY(),
+  //       // LimelightHelpers.getTY("limelight"0 * -0.1,
+  //       -m_driverController.getLeftX(),
+  //       LimelightHelpers.getTX("limelight") * -0.05,
+  //       false
+  //     ),
+  //     m_robotDrive
+  // ));
 
-    if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
-      m_robotContainer.m_robotDrive.resetOdometry(llMeasurement.pose);
-    }
+  //   if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
+  //     m_robotContainer.m_robotDrive.resetOdometry(llMeasurement.pose);
+  //   }
   }
-*/
+
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {}
