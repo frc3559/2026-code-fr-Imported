@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.wpilibj2.command.Commands.runEnd;
 import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 import static edu.wpi.first.wpilibj2.command.Commands.sequence;
@@ -241,11 +242,11 @@ private void stopUnjamBall() {
 
   public Command getAutonomousCommand() {
 
-    Command shootcmd = new ParallelCommandGroup(
-      runEnd(() -> m_robotShoot.shooterSet(.28), () -> m_robotShoot.stopShooter()),
+    Command shootcmd = Commands.deadline(
+      waitSeconds(10),
+      runEnd(() -> m_robotShoot.shooterSet(.22), () -> m_robotShoot.stopShooter()),
       runEnd(() -> shootBall(), () -> dontFeed()),
-      waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0), () -> m_robotIntakeSnake.intakeSnake(0, 0))), //first num is snake, second num is intake
-      waitSeconds(11).andThen(runOnce(() -> m_robotShoot.stopShooter()))
+      waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0), () -> m_robotIntakeSnake.intakeSnake(0, 0))) //first num is snake, second num is intake
     );
 
     Command drivecmd = new RunCommand(
