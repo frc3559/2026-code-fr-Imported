@@ -54,8 +54,8 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private double drivespeedmult = 0.5;      //Robot drive speed
-  //private double turnspeedmult = 0;     //Robot turn speed \ Seems to be related to the issue with the robots' turning going 90 degrees
+  private double drivespeedmult = 0.3;      //Robot drive speed
+  private double turnspeedmult = 0.1;     //Robot turn speed
 
   //private final PathPlannerPath autoChooser;
   
@@ -97,7 +97,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(/*(*/m_driverController.getLeftY() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(/*(*/m_driverController.getLeftX() * drivespeedmult/*  + )*/, OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(/*(*/m_driverController.getRightX()/** turnspeedmult + )*/, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(/*(*/m_driverController.getRightX() * turnspeedmult/*  + )*/, OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
   }
@@ -248,7 +248,7 @@ private void stopUnjamBall() {
       waitSeconds(2).andThen(runEnd(() -> m_robotIntakeSnake.intakeSnake(1, 0), () -> m_robotIntakeSnake.intakeSnake(0, 0)))//first num is snake, second num is intake
     );
 
-    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false), m_robotDrive).withTimeout(0.6).andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive));
+    Command drivecmd = new RunCommand(() -> m_robotDrive.drive(-1, 0, 0, false), m_robotDrive).withTimeout(0.75).andThen(Commands.runOnce(() -> m_robotDrive.drive(0, 0, 0, false), m_robotDrive));
 
     return sequence(
       drivecmd,
