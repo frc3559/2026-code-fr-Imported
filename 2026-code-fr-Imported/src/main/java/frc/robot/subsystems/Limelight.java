@@ -26,15 +26,16 @@ public class Limelight extends SubsystemBase {
         double tx = getTx();
         boolean tv = hasTarget();
 
-        if (tv == true) {
+        if (hasTarget() == true) {
+            //Rotate robot tx degrees using rot or rotDelivered??
             System.out.println("Limelight Target In Range");
         } else {
             System.out.println("Limelight Does Not Detect Target");
-        }   //No clue if this is in the correct spot
+        }   //No clue if this is the correct spot for this to work
 
         /*
         =: Complete
-        -: In Progress/Could be completed in seconds
+        -: In Progress/Could be completed quickly
         _: Haven't Started
         1: Right Limelight
         2: Left Limelight
@@ -46,6 +47,8 @@ public class Limelight extends SubsystemBase {
         -_Track apriltags in code
         __Rotate robot towards apriltags
         __Add LimelightHelpers.SetRobotOrientation/(call every frame)??
+        ------------------------------------------------------------------
+        Possibly check line 163 in DriveSubsystem for hub distance??
         */
     }
 }
