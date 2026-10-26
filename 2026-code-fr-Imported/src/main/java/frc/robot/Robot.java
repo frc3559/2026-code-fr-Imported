@@ -103,7 +103,8 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run();
+
+    CommandScheduler.getInstance().run(); //DO NOT COMMENT THIS OUT
 
   //   //Limelight
   //   double omegaRps = Units.degreesToRotations(m_robotContainer.m_robotDrive.getTurnRate());
@@ -121,7 +122,7 @@ public class Robot extends TimedRobot {
   //     m_robotDrive
   // ));
 
-  //   if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
+  //   if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {     //This might be important??
   //     m_robotContainer.m_robotDrive.resetOdometry(llMeasurement.pose);
   //   }
   }
