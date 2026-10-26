@@ -36,8 +36,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
     // Get the default NetworkTables instance
-    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-    
+    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight"); //DO NOT TOUCH THE SURROUNDING LINES, dunno why but that "key:" thing acts extremely wierd if you do
    /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -103,7 +102,6 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-
     CommandScheduler.getInstance().run(); //DO NOT COMMENT THIS OUT
 
   //   //Limelight
@@ -122,7 +120,7 @@ public class Robot extends TimedRobot {
   //     m_robotDrive
   // ));
 
-  //   if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {     //This might be important??
+  //   if (llMeasurement != null && llMeasurement.tagCount > 0 && Math.abs(omegaRps) < 2.0) {
   //     m_robotContainer.m_robotDrive.resetOdometry(llMeasurement.pose);
   //   }
   }
